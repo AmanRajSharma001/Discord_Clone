@@ -8,6 +8,7 @@ import Larry from "./assets/Users_Icon/Larry.webp";
 import discordLogo from "./assets/DiscordLogo.png";
 import Channels from "./components/Channels.jsx"
 import { useState } from "react"
+
 const activities = [
   {
     activity_type: "Playing",
@@ -185,6 +186,39 @@ const messages = [
   }
 ]
 
+const initialGroups = [
+  {
+    id: 1000,
+    name: "The Boys",
+    image: "https://picsum.photos/seed/group1/200",
+
+    members: [1, 2, 3, 4],
+
+    messages: [
+      {
+        id: 1,
+        content: "yo guys",
+        timestamp: new Date().toISOString(),
+        user: {
+          id: 1,
+          name: "Wampus",
+          image: Wampus
+        }
+      },
+      {
+        id: 2,
+        content: "sup 😭",
+        timestamp: new Date().toISOString(),
+        user: {
+          id: 2,
+          name: "Larry_4291",
+          image: Larry
+        }
+      }
+    ]
+  }
+];
+
 export default function App(){
   const [user,setUser] = useState(null)
   const [sliderComponent,setSliderComponent] = useState(1);
@@ -193,6 +227,8 @@ export default function App(){
   const [servers,setServers] = useState([]);
   const [selectServer,setSelectServer] = useState(null);
   const [selectedChannel, setSelectedChannel] = useState({id: "general",name: "general",type: "text",messages: []});
+  const [selectedGroup,setSelectedGroup] = useState(null)
+  const [groups, setGroups] = useState(initialGroups);
   
   return (
     <div className="app">
@@ -200,8 +236,8 @@ export default function App(){
       <div className="mainpart">
         <Sidebar servers = {servers} setServers = {setServers} selectServer = {selectServer} setSelectServer = {setSelectServer} selectedChannel = {selectedChannel} setSelectedChannel = {setSelectedChannel} user = {user} setUser = {setUser}/>
         <div className="content-area">
-          {selectServer ? <Channels selectServer = {selectServer} setSelectServer = {setSelectServer} selectedChannel = {selectedChannel} setSelectedChannel = {setSelectedChannel}/> : <Slider sliderComponent = {sliderComponent} setSliderComponent = {setSliderComponent} users = {userData} setUserData = {setUserData} getRandomActivity = {getRandomActivity} selectServer = {selectServer} user = {user} setUser = {setUser}/>}
-          <Main sliderComponent = {sliderComponent} setSliderComponent = {setSliderComponent} users = {userData} setUserData = {setUserData} getRandomActivity = {getRandomActivity} messageRequests = {messageRequests} setMessageRequests = {setMessageRequests} selectServer = {selectServer} setSelectServer = {setSelectServer} selectedChannel = {selectedChannel} setSelectedChannel = {setSelectedChannel} setServers = {setServers} user = {user} setUser = {setUser}/>
+          {selectServer ? <Channels selectServer = {selectServer} setSelectServer = {setSelectServer} selectedChannel = {selectedChannel} setSelectedChannel = {setSelectedChannel}/> : <Slider sliderComponent = {sliderComponent} setSliderComponent = {setSliderComponent} users = {userData} setUserData = {setUserData} getRandomActivity = {getRandomActivity} selectServer = {selectServer} user = {user} setUser = {setUser} groups = {groups} selectedGroup = {selectedGroup} setSelectedGroup = {setSelectedGroup}/>}
+          <Main sliderComponent = {sliderComponent} setSliderComponent = {setSliderComponent} users = {userData} setUserData = {setUserData} getRandomActivity = {getRandomActivity} messageRequests = {messageRequests} setMessageRequests = {setMessageRequests} selectServer = {selectServer} setSelectServer = {setSelectServer} selectedChannel = {selectedChannel} setSelectedChannel = {setSelectedChannel} setServers = {setServers} user = {user} setUser = {setUser} groups = {groups} setGroups = {setGroups} selectedGroup = {selectedGroup} setSelectedGroup = {setSelectedGroup}/>
         </div>
       </div>
       {/* <Player /> */}

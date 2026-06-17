@@ -283,15 +283,12 @@ function Friends({users,setUserData,getRandomActivity,user,setUser,sliderCompone
                         </div>
                         <div className='dm-users'>
                             {friendsForDM.length === 0 ? (
-                                <div className="dm-no-results">No friends found.</div>
+                                <div className="dm-no-results">No results found.</div>
                             ) : (
                                 friendsForDM.map((x) => {
                                     const isSelected = selectedFriends.includes(x.id);
                                     return (
-                                        <li 
-                                            key={x.id} 
-                                            className="dm-user-row" 
-                                            onClick={() => toggleFriendSelection(x.id)}
+                                        <li key={x.id} className="dm-user-row" onClick={() => toggleFriendSelection(x.id)}
                                         >
                                             <div className="dm-left">
                                                 <div className="dm-avatar-wrapper">
