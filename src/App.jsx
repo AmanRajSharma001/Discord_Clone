@@ -229,7 +229,7 @@ export default function App(){
   const [selectedChannel, setSelectedChannel] = useState({id: "general",name: "general",type: "text",messages: []});
   const [selectedGroup,setSelectedGroup] = useState(null)
   const [groups, setGroups] = useState(initialGroups);
-  
+  const [selectedFriends, setSelectedFriends] = useState([]);
   return (
     <div className="app">
       <Navbar sliderComponent = {sliderComponent} setSliderComponent = {setSliderComponent}/>
@@ -237,7 +237,7 @@ export default function App(){
         <Sidebar servers = {servers} setServers = {setServers} selectServer = {selectServer} setSelectServer = {setSelectServer} selectedChannel = {selectedChannel} setSelectedChannel = {setSelectedChannel} user = {user} setUser = {setUser}/>
         <div className="content-area">
           {selectServer ? <Channels selectServer = {selectServer} setSelectServer = {setSelectServer} selectedChannel = {selectedChannel} setSelectedChannel = {setSelectedChannel}/> : <Slider sliderComponent = {sliderComponent} setSliderComponent = {setSliderComponent} users = {userData} setUserData = {setUserData} getRandomActivity = {getRandomActivity} selectServer = {selectServer} user = {user} setUser = {setUser} groups = {groups} selectedGroup = {selectedGroup} setSelectedGroup = {setSelectedGroup}/>}
-          <Main sliderComponent = {sliderComponent} setSliderComponent = {setSliderComponent} users = {userData} setUserData = {setUserData} getRandomActivity = {getRandomActivity} messageRequests = {messageRequests} setMessageRequests = {setMessageRequests} selectServer = {selectServer} setSelectServer = {setSelectServer} selectedChannel = {selectedChannel} setSelectedChannel = {setSelectedChannel} setServers = {setServers} user = {user} setUser = {setUser} groups = {groups} setGroups = {setGroups} selectedGroup = {selectedGroup} setSelectedGroup = {setSelectedGroup}/>
+          <Main sliderComponent = {sliderComponent} setSliderComponent = {setSliderComponent} users = {userData} setUserData = {setUserData} getRandomActivity = {getRandomActivity} messageRequests = {messageRequests} setMessageRequests = {setMessageRequests} selectServer = {selectServer} setSelectServer = {setSelectServer} selectedChannel = {selectedChannel} setSelectedChannel = {setSelectedChannel} setServers = {setServers} user = {user} setUser = {setUser} groups = {groups} setGroups = {setGroups} selectedGroup = {selectedGroup} setSelectedGroup = {setSelectedGroup} selectedFriends = {selectedFriends} setSelectedFriends = {setSelectedFriends}/>
         </div>
       </div>
       {/* <Player /> */}
