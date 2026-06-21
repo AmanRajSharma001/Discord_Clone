@@ -1,6 +1,6 @@
-import {useEffect, useState} from "react"
+import {useState} from "react"
 
-function Slider({sliderComponent,setSliderComponent,users,setUserData,selectServer,user,setUser,groups,selectedGroup,setSelectedGroup}) {
+function Slider({sliderComponent,setSliderComponent,users,setUserData,selectServer,user,setUser,groups,selectedGroup,setSelectedGroup,setOpenGroup}) {
   const [buttonCount,setButtonCount] = useState(0);
   return (
     <div className='slider'>
@@ -35,7 +35,7 @@ function Slider({sliderComponent,setSliderComponent,users,setUserData,selectServ
         <div className="convo-friends">
           <div className="convo-users">
               <h2 className="add-friends"><span>Direct Messages</span>
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-5">
+              <svg onClick={() => setOpenGroup(true)} style={{ cursor: "pointer" }} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-5">
               <path fill-rule="evenodd" d="M12 3.75a.75.75 0 0 1 .75.75v6.75h6.75a.75.75 0 0 1 0 1.5h-6.75v6.75a.75.75 0 0 1-1.5 0v-6.75H4.5a.75.75 0 0 1 0-1.5h6.75V4.5a.75.75 0 0 1 .75-.75Z" clip-rule="evenodd" />
               </svg>
               </h2>

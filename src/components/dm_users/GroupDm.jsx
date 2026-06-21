@@ -1,17 +1,14 @@
 import { useState,useEffect,useRef } from "react";
 import UserProf from "./UserProf";
 
-function GroupDm({ groups, setGroups, selectedGroup }) {
+function GroupDm({ groups, setGroups, selectedGroup,users,setUserData }) {
     const [searchVal,setSearchVal] = useState("")
     const [chatVal,setChatVal] = useState("")
     const messagesEndRef = useRef(null);
     const VITE_HF_TOKEN = import.meta.env.VITE_HF_TOKEN;
-    const scrollToBottom = () => {
-        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
-    }
-    const groupDat = groups.find(
-        g => g.id === selectedGroup
-    );
+    const scrollToBottom = () => {messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })}
+    const groupDat = groups.find(g => g.id === selectedGroup);
+
     useEffect(() => {scrollToBottom();}, [groupDat.messages]);
         const handleEnterKey = (e) => {
             if (e.key === "Enter" && !e.shiftKey) {
@@ -19,13 +16,18 @@ function GroupDm({ groups, setGroups, selectedGroup }) {
 
                 if (chatVal.trim() === "") return;
 
+                const SENDER_ID = 4;
                 const userMessage = chatVal;
+
+                const currentGroupId = selectedGroup;
+                const currentMembers = groupDat.members;
+
                 const newMessage = {
                     id: Date.now(),
                     content: userMessage,
                     timestamp: new Date().toISOString(),
                     user: {
-                        id: 4,
+                        id: SENDER_ID,
                         name: "DeezBoi",
                         tag: "deezboi",
                         image: "https://picsum.photos/seed/deezboi/200",
@@ -34,103 +36,69 @@ function GroupDm({ groups, setGroups, selectedGroup }) {
 
                 setGroups(prev =>
                     prev.map(g =>
-                        g.id === selectedGroup
-                            ? {
-                                ...g,
-                                messages: [...g.messages, newMessage]
-                            }
+                        g.id === currentGroupId
+                            ? { ...g, messages: [...g.messages, newMessage] }
                             : g
                     )
                 );
                 setChatVal("");
-                setTimeout(async () => {
-                    try {
-                        const response = await query({
-                            messages: [
-                                {
-                                role: "system",
-                                content: `
-                                    You are ${groupDat.name}.
 
-                                    Identity:
-                                    - Real Discord user.
-                                    - Chats with friends online daily.
+                const eligibleMembers = currentMembers.filter(id => id !== SENDER_ID);
+                const shuffled = [...eligibleMembers].sort(() => Math.random() - 0.5);
+                const randomCount = Math.min(Math.floor(Math.random() * 3) + 1, shuffled.length);
+                const responders = shuffled.slice(0, randomCount);
 
-                                    Rules:
-                                    - Reply like a Discord user.
-                                    - Maximum 1 sentence, unless asked for.
-                                    - Use lowercase naturally.
-                                    - Never act like customer support.
-                                    - Never act like a teacher.
-                                    - Never act like an assistant.
-                                    - Never offer help unless asked.
-                                    - Never explain things unless asked.
-                                    - Never write lists.
-                                    - Never write paragraphs.
-                                    - Never mention being an AI.
-                                    - Never speak out your thoughts
-                                    - Never act like AI or act like serving people.
+                responders.forEach((memberId, index) => {
+                    const member = users.find(u => u.id === memberId);
+                    if (!member) return;
 
-                                    Examples:
-
-                                    User: hii
-                                    Reply: yoo what's up
-
-                                    User: sup
-                                    Reply: not much bro 😭
-
-                                    User: how are you
-                                    Reply: pretty good tbh
-
-                                    User: lol
-                                    Reply: 💀
-
-                                    User: gn
-                                    Reply: gn bro
-
-                                    Output only the reply message.
-                                    Respond to the message directly
-                                `
-                                },
-                                {
-                                    role: "user",
-                                    content: userMessage
-                                }
-                            ],
-                            model: "Qwen/Qwen2.5-3B-Instruct:featherless-ai",
-                        });
-
-                        if (!response?.choices) {
-                            console.error("Invalid response:", response);
-                            return;
-                        }
-                        const aiReply = response.choices[0].message.content;
-                        const aiMessage = {
-                            id: Date.now() + 1,
-                            content: aiReply,
-                            timestamp: new Date().toISOString(),
-                            user: {
-                                id: groupDat.id,
-                                name: groupDat.name,
-                                image: groupDat.image
-                            }
-                        };
-
-                        setGroups(prev =>
-                            prev.map(g =>
-                                g.id === selectedGroup
-                                    ? {
-                                        ...g,
-                                        messages: [...g.messages, aiMessage]
+                    setTimeout(async () => {
+                        try {
+                            const response = await query({
+                                messages: [
+                                    {
+                                        role: "system",
+                                        content: `You are ${member.name}, chatting in a Discord group DM. Reply to the message in 3-10 words. Use lowercase, casual Discord slang, and emojis occasionally. Output ONLY your reply — no name prefix, no punctuation outside the reply, reply to the message with something related or similar to it.`
+                                    },
+                                    {
+                                        role: "user",
+                                        content: userMessage
                                     }
-                                    : g
-                            )
-                        );
+                                ],
+                                model: "Qwen/Qwen2.5-3B-Instruct:featherless-ai",
+                            });
 
-                    } catch (error) {
-                        console.error("AI ERROR:", error);
-                    }
-                }, 2000);
+                            if (!response?.choices?.[0]?.message?.content) {
+                                console.error(`No response for ${member.name}:`, response);
+                                return;
+                            }
+
+                            const content = response.choices[0].message.content.trim();
+
+                            const aiMessage = {
+                                id: crypto.randomUUID(),
+                                content,
+                                timestamp: new Date().toISOString(),
+                                user: {
+                                    id: member.id,
+                                    name: member.name,
+                                    image: member.image
+                                }
+                            };
+
+                            setGroups(prev =>
+                                prev.map(g =>
+                                    g.id === currentGroupId
+                                        ? { ...g, messages: [...g.messages, aiMessage] }
+                                        : g
+                                )
+                            );
+
+                        } catch (error) {
+                            console.error(`AI ERROR for ${member.name}:`, error);
+                        }
+                    }, 1500 + index * 1500);
+                });
             }
         };
 
@@ -194,7 +162,7 @@ function GroupDm({ groups, setGroups, selectedGroup }) {
                             <h1>{groupDat.name}</h1>
                             <p>{`Welcome to the beginning of the ${groupDat.name} group.`}</p>
                             <div className="group-welcome-additional">
-                                <p className="text-[14px]">{groupDat.members.length} Members</p>
+                                <p className="text-[14px]">{groupDat.members.length + 1} Members</p>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class="lucide lucide-dot-icon lucide-dot"><circle cx="12.1" cy="12.1" r="1"/></svg>
                                 <button>
                                     <svg class="icon_a22cb0" aria-hidden="true" role="img" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24"><path fill="currentColor" d="M14.5 8a3 3 0 1 0-2.7-4.3c-.2.4.06.86.44 1.12a5 5 0 0 1 2.14 3.08c.01.06.06.1.12.1ZM16.62 13.17c-.22.29-.65.37-.92.14-.34-.3-.7-.57-1.09-.82-.52-.33-.7-1.05-.47-1.63.11-.27.2-.57.26-.87.11-.54.55-1 1.1-.92 1.6.2 3.04.92 4.15 1.98.3.27-.25.95-.65.95a3 3 0 0 0-2.38 1.17ZM15.19 15.61c.13.16.02.39-.19.39a3 3 0 0 0-1.52 5.59c.2.12.26.41.02.41h-8a.5.5 0 0 1-.5-.5v-2.1c0-.25-.31-.33-.42-.1-.32.67-.67 1.58-.88 2.54a.2.2 0 0 1-.2.16A1.5 1.5 0 0 1 2 20.5a7.5 7.5 0 0 1 13.19-4.89ZM9.5 12a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM15.5 22Z" class=""></path><path fill="currentColor" d="M19 14a1 1 0 0 1 1 1v3h3a1 1 0 0 1 0 2h-3v3a1 1 0 0 1-2 0v-3h-3a1 1 0 1 1 0-2h3v-3a1 1 0 0 1 1-1Z" class=""></path></svg>
