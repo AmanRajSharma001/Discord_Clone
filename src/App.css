@@ -3629,7 +3629,6 @@ th.nitro-column > span {
   width: 100%;
   flex: 1;
   min-height: 0;
-  padding: 12px;
   overflow: hidden;
 }
 
@@ -3639,6 +3638,7 @@ th.nitro-column > span {
   flex-direction: column;
   height: 100%;
   min-height: 0;
+  padding: 12px;
   overflow: hidden;
 }
 
@@ -4359,7 +4359,6 @@ th.nitro-column > span {
   width: 100%;
   flex: 1;
   min-height: 0;
-  padding: 12px;
   overflow: hidden;
 }
 
@@ -4370,6 +4369,7 @@ th.nitro-column > span {
   height: 100%;
   min-height: 0;
   overflow: hidden;
+  padding: 12px;
 }
 
 .group-scroll-area {
@@ -4609,4 +4609,86 @@ th.nitro-column > span {
 
 .group-welcome-additional > button:nth-of-type(1) {
   background: rgb(97, 85, 236);
+}
+
+.group-main-right{
+  border-left: 1px solid rgba(255,255,255,0.05);
+  height: 100%;
+}
+
+.active-group-users{
+  padding: 12px;
+}
+
+.active-group-users > h3{
+  font-size: 14px;
+  color: grey;
+  padding: 12px 0 0 0;
+}
+
+.active-user-row {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 40px;
+  padding: 0 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin: 2px 0;
+  transition: background-color 0.1s ease;
+}
+
+
+.active-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.active-avatar-wrapper {
+  position: relative;
+  width: 32px;
+  height: 32px;
+}
+
+.active-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.active-avatar-wrapper .status-icon {
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  width: 14px;
+  height: 14px;
+}
+
+.active-user-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.active-user-info h2 {
+  color: grey;
+  font-size: 14px;
+  font-weight: 500;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.opaque,.opaque > .active-user-info > h2{
+  opacity: 0.5;
+}
+
+.active-user-row:hover {
+  background-color: #3f4248;
+  opacity: 1;
+}
+
+.active-user-row:hover .active-user-info h2{
+  color: white;
 }

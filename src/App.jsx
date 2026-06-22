@@ -190,7 +190,7 @@ const messages = [
 const initialGroups = [
   {
     id: 1000,
-    name: "The Boys",
+    name: "Game Night",
     image: "https://picsum.photos/seed/group1/200",
 
     members: [1, 2, 3, 4],

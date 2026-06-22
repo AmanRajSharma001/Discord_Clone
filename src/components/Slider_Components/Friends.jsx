@@ -39,7 +39,7 @@ function Friends({users,setUserData,getRandomActivity,setUser,setSliderComponent
         })
         setUserData(updatedUsers)
     }
-
+ 
     function handleFriendReject(id){
         const updatedUsers = users.filter((x)=>x.id != id)
         setUserData(updatedUsers)

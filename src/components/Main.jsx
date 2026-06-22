@@ -12,7 +12,7 @@ function Main({sliderComponent,users,setUserData,getRandomActivity,messageReques
         {selectServer ? 
               <ServerChannel server={selectServer} channel={selectedChannel} setSelectServer = {setSelectServer} setSelectedChannel = {setSelectedChannel} setServers = {setServers}/>
         : user ? <UsersDm users = {users} setUserData = {setUserData} user = {user} setUser = {setUser}/>
-        : selectedGroup ? <GroupDm groups={groups} setGroups={setGroups} selectedGroup={selectedGroup} users = {users} setUserData = {setUserData}/>
+        : selectedGroup ? <GroupDm groups={groups} setGroups={setGroups} selectedGroup={selectedGroup} users = {users} setUserData = {setUserData} setOpenGroup = {setOpenGroup}/>
         :
         <>
           {sliderComponent == 1 && <Friends users = {users} setUserData = {setUserData} getRandomActivity = {getRandomActivity} setUser = {setUser} setSliderComponent = {setSliderComponent} setOpenGroup = {setOpenGroup}/>}
