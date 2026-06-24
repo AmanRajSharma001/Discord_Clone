@@ -52,6 +52,29 @@ function getRandomActivity(){
   ]
 }
 
+function getUserProfileFields(id) {
+  return {
+    banner: `https://picsum.photos/seed/banner-${id}/1200/400`,
+    pronouns: id % 2 === 0 ? "She/Her" : "He/Him",
+    memberSince: "Aug 31, 2024",
+    badges: [
+      { id: 1, image: `https://picsum.photos/seed/badge1-${id}/32/32` },
+      { id: 2, image: `https://picsum.photos/seed/badge2-${id}/32/32` }
+    ],
+    gameCollection: [
+      { id: 1, name: "GTA V", image: `https://picsum.photos/seed/game-gta-${id}/80/80` },
+      { id: 2, name: "Hill Climb Racing", image: `https://picsum.photos/seed/game-hill-${id}/80/80` },
+      { id: 3, name: "Horizon 5", image: `https://picsum.photos/seed/game-horizon-${id}/80/80` }
+    ],
+    wishlist: [
+      { id: 1, name: "Discord Wings", image: `https://picsum.photos/seed/wish-wings-${id}/120/120` },
+      { id: 2, name: "Neon Glow", image: `https://picsum.photos/seed/wish-neon-${id}/120/120` }
+    ],
+    mutualServers: [],
+    mutualFriends: []
+  };
+}
+
 const users = [
   {
     id: 1,
@@ -63,7 +86,8 @@ const users = [
     has_dm: true,
     request_type: "",
     messages: [],
-    ...getRandomActivity()
+    ...getRandomActivity(),
+    ...getUserProfileFields(1)
   },
   {
     id: 2,
@@ -75,7 +99,8 @@ const users = [
     has_dm: true,
     request_type: "",
     messages: [],
-    ...getRandomActivity()
+    ...getRandomActivity(),
+    ...getUserProfileFields(2)
   },
   {
     id: 3,
@@ -87,7 +112,8 @@ const users = [
     has_dm: true,
     request_type: "",
     messages: [],
-    ...getRandomActivity()
+    ...getRandomActivity(),
+    ...getUserProfileFields(3)
   },
   {
     id: 4,
@@ -99,7 +125,8 @@ const users = [
     has_dm: true,
     request_type: "sent",
     messages: [],
-    ...getRandomActivity()
+    ...getRandomActivity(),
+    ...getUserProfileFields(4)
   },
   {
     id: 5,
@@ -111,7 +138,8 @@ const users = [
     has_dm: false,
     request_type: "received",
     messages: [],
-    ...getRandomActivity()
+    ...getRandomActivity(),
+    ...getUserProfileFields(5)
   }
 ]
 
@@ -127,7 +155,8 @@ const messages = [
     request_type: "received",
     is_mssgreq: true,
     messages: [],
-    ...getRandomActivity()
+    ...getRandomActivity(),
+    ...getUserProfileFields(101)
   },
 
   {
@@ -141,7 +170,8 @@ const messages = [
     request_type: "received",
     is_mssgreq: true,
     messages: [],
-    ...getRandomActivity()
+    ...getRandomActivity(),
+    ...getUserProfileFields(102)
   },
 
   {
@@ -155,7 +185,8 @@ const messages = [
     request_type: "sent",
     is_mssgreq: true,
     messages: [],
-    ...getRandomActivity()
+    ...getRandomActivity(),
+    ...getUserProfileFields(103)
   },
 
   {
@@ -169,7 +200,8 @@ const messages = [
     request_type: "received",
     is_mssgreq: true,
     messages: [],
-    ...getRandomActivity()
+    ...getRandomActivity(),
+    ...getUserProfileFields(104)
   },
 
   {
@@ -183,7 +215,8 @@ const messages = [
     request_type: "received",
     is_mssgreq: true,
     messages: [],
-    ...getRandomActivity()
+    ...getRandomActivity(),
+    ...getUserProfileFields(105)
   }
 ]
 

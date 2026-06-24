@@ -46,8 +46,9 @@ function Friends({users,setUserData,getRandomActivity,setUser,setSliderComponent
     }
 
     function addUserData(){
+        const newId = Date.now();
         setUserData([...users,{
-            id: Date.now(),
+            id: newId,
             name:addFriend.charAt(0).toUpperCase() + addFriend.slice(1),
             tag: addFriend,
             image: `https://picsum.photos/seed/${addFriend}/200`,
@@ -55,6 +56,24 @@ function Friends({users,setUserData,getRandomActivity,setUser,setSliderComponent
             is_friend: false,
             has_dm: false,
             request_type: "sent",
+            banner: `https://picsum.photos/seed/banner-${newId}/1200/400`,
+            pronouns: "He/Him",
+            memberSince: "Aug 31, 2024",
+            badges: [
+              { id: 1, image: `https://picsum.photos/seed/badge1-${newId}/32/32` },
+              { id: 2, image: `https://picsum.photos/seed/badge2-${newId}/32/32` }
+            ],
+            gameCollection: [
+              { id: 1, name: "GTA V", image: `https://picsum.photos/seed/game-gta-${newId}/80/80` },
+              { id: 2, name: "Hill Climb Racing", image: `https://picsum.photos/seed/game-hill-${newId}/80/80` },
+              { id: 3, name: "Horizon 5", image: `https://picsum.photos/seed/game-horizon-${newId}/80/80` }
+            ],
+            wishlist: [
+              { id: 1, name: "Discord Wings", image: `https://picsum.photos/seed/wish-wings-${newId}/120/120` },
+              { id: 2, name: "Neon Glow", image: `https://picsum.photos/seed/wish-neon-${newId}/120/120` }
+            ],
+            mutualServers: [],
+            mutualFriends: [],
             ...getRandomActivity()
         }])
         setAddFriend("")
