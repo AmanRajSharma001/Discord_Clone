@@ -4697,7 +4697,7 @@ th.nitro-column > span {
   display: flex;
   flex-direction: column;
   height: 100%;
-  background-color: #111214;
+  background-color: #101010;
   position: relative;
   box-sizing: border-box;
 }
@@ -4734,8 +4734,8 @@ th.nitro-column > span {
   position: absolute;
   bottom: 2px;
   right: 2px;
-  width: 18px;
-  height: 18px;
+  width: 22px;
+  height: 22px;
   border-radius: 50%;
   border: 4px solid #111214;
   box-sizing: border-box;
@@ -4762,19 +4762,6 @@ th.nitro-column > span {
   flex-direction: column;
   gap: 12px;
   box-sizing: border-box;
-}
-
-.user-profile-scroll-container::-webkit-scrollbar {
-  width: 6px;
-}
-
-.user-profile-scroll-container::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.user-profile-scroll-container::-webkit-scrollbar-thumb {
-  background-color: #2b2d31;
-  border-radius: 4px;
 }
 
 .user-profile-info {
@@ -4922,19 +4909,6 @@ th.nitro-column > span {
   gap: 8px;
   overflow-x: auto;
   padding-bottom: 4px;
-}
-
-.user-profile-wishlist-list::-webkit-scrollbar {
-  height: 4px;
-}
-
-.user-profile-wishlist-list::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.user-profile-wishlist-list::-webkit-scrollbar-thumb {
-  background-color: #2b2d31;
-  border-radius: 2px;
 }
 
 .user-profile-wishlist-card {

@@ -7,7 +7,7 @@ function UsersDm({users,setUserData,user,setUser}) {
     const messagesEndRef = useRef(null);
     const VITE_HF_TOKEN = import.meta.env.VITE_HF_TOKEN;
     const scrollToBottom = () => {
-        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
+        messagesEndRef.current?.scrollIntoView()
     }
     const userDat = users.filter((x)=>x.id == user)[0];
     useEffect(() => {scrollToBottom();}, [userDat.messages]);

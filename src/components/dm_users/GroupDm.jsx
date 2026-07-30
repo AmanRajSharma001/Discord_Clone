@@ -5,7 +5,7 @@ function GroupDm({ groups, setGroups, selectedGroup,users,setUserData,setOpenGro
     const [chatVal,setChatVal] = useState("")
     const messagesEndRef = useRef(null);
     const VITE_HF_TOKEN = import.meta.env.VITE_HF_TOKEN;
-    const scrollToBottom = () => {messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })}
+    const scrollToBottom = () => {messagesEndRef.current?.scrollIntoView()}
     const groupDat = groups.find(g => g.id === selectedGroup);
 
     useEffect(() => {scrollToBottom();}, [groupDat.messages]);
