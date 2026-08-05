@@ -1,14 +1,14 @@
 import "./App.css"
-import Navbar from "./components/Navbar"
-import Main from "./components/Main"
-import Slider from "./components/Slider"
-import Sidebar from "./components/Sidebar"
+import Navbar from "./components/Navbar.jsx"
+import Main from "./components/Main.jsx"
+import Slider from "./components/Slider.jsx"
+import Sidebar from "./components/Sidebar.jsx"
 import Wampus from "./assets/Users_Icon/User_Wampus.webp";
 import Larry from "./assets/Users_Icon/Larry.webp";
 import discordLogo from "./assets/DiscordLogo.png";
 import Channels from "./components/Channels.jsx"
 import { useState } from "react"
-import CreateGroup from "./components/dm_users/CreateGroup"
+import CreateGroup from "./components/dm_users/CreateGroup.jsx"
 
 const activities = [
   {
