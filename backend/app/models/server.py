@@ -3,7 +3,7 @@ from datetime import datetime
 from sqlalchemy import DateTime, ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column
 
-from app.database import Base
+from app.core.database import Base
 
 
 class Server(Base):
@@ -42,3 +42,9 @@ class ServerMember(Base):
     member_id: Mapped[int] = mapped_column(ForeignKey("users.user_id"), nullable=False)
     member_role: Mapped[str] = mapped_column(String, default="member")
     joined_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+
+class User(Base):
+    __tablename__ = "users"
+
+    user_id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    username: Mapped[str] = mapped_column(String, nullable=False)

@@ -1,0 +1,19 @@
+# Virtual Environment
+venv/
+
+# Environment Variables
+.env
+
+# Python Cache
+__pycache__/
+*.py[cod]
+
+# Test / Cache
+.pytest_cache/
+.mypy_cache/
+
+# macOS
+.DS_Store
+
+# Alembic
+alembic/versions/__pycache__/
