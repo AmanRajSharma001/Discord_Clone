@@ -8,6 +8,7 @@ import leafIcon from "../assets/leaf.svg"
 import paintIcon from "../assets/paint.svg"
 import sofaIcon from "../assets/Sofa.svg"
 import globeIcon from "../assets/Globe.svg"
+import { createServer as createServerApi,getServers } from "../api/servers";
 import { useState,useEffect} from "react"
 
 
@@ -19,6 +20,33 @@ function Sidebar({servers,setServers,selectServer,setSelectServer,selectedChanne
     const [template,setTemplate] = useState("");
     const [isLocal,setIsLocal] = useState(false);
     const [returnHome,setReturnHome] = useState(false)
+
+    useEffect(() => {
+        const loadServers = async () => {
+            const data = await getServers();
+
+            const formattedServers = data.map((server) => ({
+                id: server.server_id,
+                name: server.server_name,
+                icon: server.server_icon,
+                categories: server.categories.map((category) => ({
+                    id: category.category_id,
+                    name: category.category_name,
+                    channels: category.channels.map((channel) => ({
+                        id: channel.channel_id,
+                        name: channel.channel_name,
+                        type: channel.channel_type,
+                        messages: []
+                    }))
+                })),
+                is_Local: false
+            }));
+
+            setServers(formattedServers);
+        };
+
+        loadServers();
+    }, []);
 
     const serverTemplates = [
       {templateid: "createmyown",
@@ -449,21 +477,68 @@ function Sidebar({servers,setServers,selectServer,setSelectServer,selectedChanne
       }
     ]
 
-    const handleCreateServer = () => {
-        const templ = serverTemplates.find((x)=>x.templateid === template)
-        const newServer = {
-            id: Date.now(),
-            name: serverName,
-            icon: serverIcon,
-            categories: structuredClone(templ.categories),
-            is_Local : isLocal
+    // const handleCreateServer = async () => {
+    //     const templ = serverTemplates.find((x)=>x.templateid === template)
+    //     const newServer = {
+    //         id: Date.now(),
+    //         name: serverName,
+    //         icon: serverIcon,
+    //         categories: structuredClone(templ.categories),
+    //         is_Local : isLocal
+    //     };
+    //     handleX()
+    //     setServerName("")
+    //     setServerIcon(null)
+    //     setServers([newServer,...servers]);
+    //     setSelectServer(newServer);
+    // }
+
+    const handleCreateServer = async () => {
+        const templ = serverTemplates.find(
+            (x) => x.templateid === template
+        );
+
+        const serverData = {
+            server_name: serverName,
+            server_icon: serverIcon,
+            owner_id: 1,
+            description: null,
+            categories: templ.categories.map((category) => ({
+                category_name: category.name,
+                channels: category.channels.map((channel) => ({
+                    channel_name: channel.name,
+                    channel_type: channel.type
+                }))
+            }))
         };
-        handleX()
-        setServerName("")
-        setServerIcon(null)
-        setServers([newServer,...servers]);
+
+        const createdServer = await createServerApi(serverData);
+
+        console.log("Created server:", createdServer);
+
+        const newServer = {
+            id: createdServer.server_id,
+            name: createdServer.server_name,
+            icon: createdServer.server_icon,
+            categories: createdServer.categories.map((category) => ({
+                id: category.category_id,
+                name: category.category_name,
+                channels: category.channels.map((channel) => ({
+                    id: channel.channel_id,
+                    name: channel.channel_name,
+                    type: channel.channel_type,
+                    messages: []
+                }))
+            })),
+            is_Local: false
+        };
+
+        handleX();
+        setServerName("");
+        setServerIcon(null);
+        setServers([newServer, ...servers]);
         setSelectServer(newServer);
-    }
+    };
 
     const handleServerIcon = (e) => {
         const file = e.target.files[0];

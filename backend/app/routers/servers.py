@@ -14,7 +14,7 @@ from app.schemas.server import (
 router = APIRouter(prefix="/servers", tags=["Servers"])
 
 
-@router.post("/")
+@router.post("/", response_model=ServerResponse)
 def create_server(server: ServerCreate, db: Session = Depends(get_db)):
     new_server = Server(
         server_name=server.server_name,
@@ -47,7 +47,45 @@ def create_server(server: ServerCreate, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(new_server)
 
-    return new_server
+    categories = db.query(Category).filter(
+        Category.server_id == new_server.server_id
+    ).all()
+
+    category_data = []
+
+    for category in categories:
+        channels = db.query(Channel).filter(
+            Channel.category_id == category.category_id
+        ).all()
+
+        channel_data = []
+
+        for channel in channels:
+            channel_data.append(
+                ChannelResponse(
+                    channel_id=channel.channel_id,
+                    channel_name=channel.channel_name,
+                    channel_type=channel.channel_type
+                )
+            )
+
+        category_data.append(
+            CategoryResponse(
+                category_id=category.category_id,
+                category_name=category.category_name,
+                channels=channel_data
+            )
+        )
+
+    return ServerResponse(
+        server_id=new_server.server_id,
+        server_name=new_server.server_name,
+        server_icon=new_server.server_icon,
+        owner_id=new_server.owner_id,
+        description=new_server.description,
+        created_at=new_server.created_at,
+        categories=category_data
+    )
 
 
 @router.get("/", response_model=list[ServerResponse])
