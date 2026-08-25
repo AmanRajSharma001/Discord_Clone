@@ -1,77 +1,39 @@
 import { useState, useEffect, useRef } from "react"
 import ServerMembers from "./ServerMembers"
+import { createMessage } from "../../api/message";
 
-export default function ServerChannel({server,channel,setSelectServer,setSelectedChannel,setServers}) {
+export default function ServerChannel({server,channel,messages,setMessages,setSelectServer,setSelectedChannel,setServers}) {
     const [searchVal,setSearchVal] = useState("")
     const [chatVal,setChatVal] = useState("")
     const messagesEndRef = useRef(null)
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
     }
-    useEffect(() => {scrollToBottom()},[channel.messages])
-        const handleEnterKey = (e) => {
-            const newMessage = {
-                id: Date.now(),
-                content: chatVal,
-                timestamp: new Date().toISOString(),
-                user: {
-                    id: 4,
-                    name: "DeezBoi",
-                    tag: "deezboi",
-                    image: `https://picsum.photos/seed/deezboi/200`,
-                }
-            };
-            if (e.key == "Enter" && !e.shiftKey){
-                e.preventDefault()
-                if (chatVal.trim()==="") return
-                setSelectServer(prevServer => {
-                    if (!prevServer) return prevServer;
-                    return {
-                        ...prevServer,
-                        categories: prevServer.categories.map(category => ({
-                            ...category,
-                            channels: category.channels.map(ch =>
-                                ch.id === channel.id? {
-                                        ...ch,
-                                        messages: [...ch.messages, newMessage]
-                                    }
-                                    : ch
-                                )
-                        }))
-                    };
-            });
+    useEffect(() => {
+        scrollToBottom();
+    }, [messages]);
 
-            setServers(prevServers => prevServers.map(srv => {
-                if (srv.id === server.id) {
-                    return {
-                        ...srv,
-                        categories: srv.categories.map(category => ({
-                            ...category,
-                            channels: category.channels.map(ch =>
-                                ch.id === channel.id
-                                    ? {
-                                        ...ch,
-                                        messages: [...ch.messages, newMessage]
-                                    }
-                                    : ch
-                            )
-                        }))
-                    };
-                }
-                return srv;
-            }));
+    const handleEnterKey = async (e) => {
+        if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault();
 
-            setSelectedChannel(prevChannel => {
-                if (!prevChannel || prevChannel.id !== channel.id) return prevChannel;
-                return {
-                    ...prevChannel,
-                    messages: [...prevChannel.messages, newMessage]
-                };
-            });
+            if (chatVal.trim() === "") return;
 
-            setChatVal("");
-        };
-    }
+            try {
+                const newMessage = await createMessage({
+                    channel_id: channel.id,
+                    author_id: 1,
+                    content: chatVal
+                });
+
+                setMessages(prevMessages => [...prevMessages, newMessage]);
+
+                setChatVal("");
+            } catch (error) {
+                console.error("Error sending message:", error);
+            }
+        }
+    };
     return (
         <div className='server-channel'>
             <div className='server-channel-navbar'>
@@ -121,11 +83,12 @@ export default function ServerChannel({server,channel,setSelectServer,setSelecte
                             </button>
                         </div>
                         <div className="server-channel-messages">
-                            {channel.messages.map(msg => (
-                                <div key={msg.id} className="discord-chat-message">
-                                    <img className="discord-chat-avatar" src={msg.user.image} alt={msg.user.name} />
+                            {messages.map(msg => (
+                                <div key={msg.message_id} className="discord-chat-message">
                                     <div className="discord-chat-content">
-                                        <span className="discord-chat-username">{msg.user.name}</span>
+                                        <span className="discord-chat-username">
+                                            User {msg.author_id}
+                                        </span>
                                         <p className="discord-chat-text">{msg.content}</p>
                                     </div>
                                 </div>

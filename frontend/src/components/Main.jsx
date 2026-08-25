@@ -5,12 +5,12 @@ import Friends from "./Slider_Components/Friends"
 import MessageRequest from "./Slider_Components/MessageRequest"
 import Nitro from "./Slider_Components/Nitro"
 
-function Main({sliderComponent,users,setUserData,getRandomActivity,messageRequests,setMessageRequests,selectServer,setSelectServer,selectedChannel,setSelectedChannel,setServers,user,setUser,setSliderComponent,groups,setGroups,selectedGroup,setOpenGroup}) {
+function Main({sliderComponent,users,setUserData,getRandomActivity,messageRequests,setMessageRequests,selectServer,setSelectServer,selectedChannel,messages,setMessages,setSelectedChannel,setServers,user,setUser,setSliderComponent,groups,setGroups,selectedGroup,setOpenGroup}) {
 
   return (
     <div className='main'>
         {selectServer ? 
-              <ServerChannel server={selectServer} channel={selectedChannel} setSelectServer = {setSelectServer} setSelectedChannel = {setSelectedChannel} setServers = {setServers}/>
+              <ServerChannel server={selectServer} channel={selectedChannel} messages={messages} setMessages = {setMessages} setSelectServer = {setSelectServer} setSelectedChannel = {setSelectedChannel} setServers = {setServers}/>
         : user ? <UsersDm users = {users} setUserData = {setUserData} user = {user} setUser = {setUser}/>
         : selectedGroup ? <GroupDm groups={groups} setGroups={setGroups} selectedGroup={selectedGroup} users = {users} setUserData = {setUserData} setOpenGroup = {setOpenGroup}/>
         :

@@ -7,8 +7,9 @@ import Wampus from "./assets/Users_Icon/User_Wampus.webp";
 import Larry from "./assets/Users_Icon/Larry.webp";
 import discordLogo from "./assets/DiscordLogo.png";
 import Channels from "./components/Channels.jsx"
-import { useState } from "react"
+import { useEffect, useState } from "react";
 import CreateGroup from "./components/dm_users/CreateGroup.jsx"
+import { getMessages } from "./api/message";
 
 const activities = [
   {
@@ -143,7 +144,7 @@ const users = [
   }
 ]
 
-const messages = [
+const messageRequestsData = [
   {
     id: 101,
     name: "Nova",
@@ -257,10 +258,11 @@ export default function App(){
   const [user,setUser] = useState(null)
   const [sliderComponent,setSliderComponent] = useState(1);
   const [userData,setUserData] = useState(users);
-  const [messageRequests,setMessageRequests] = useState(messages);
+  const [messageRequests,setMessageRequests] = useState(messageRequestsData);
   const [servers,setServers] = useState([]);
   const [selectServer,setSelectServer] = useState(null);
   const [selectedChannel, setSelectedChannel] = useState({id: "general",name: "general",type: "text",messages: []});
+  const [messages, setMessages] = useState([]);
   const [selectedGroup,setSelectedGroup] = useState(null)
   const [groups, setGroups] = useState(initialGroups);
   const [selectedFriends, setSelectedFriends] = useState([]);
@@ -268,6 +270,24 @@ export default function App(){
   const [modalSearchVal, setModalSearchVal] = useState("");
   const [groupImage, setGroupImage] = useState(null);
   const [groupName, setGroupName] = useState("");
+
+  useEffect(() => {
+      if (!selectedChannel?.id || typeof selectedChannel.id !== "number") {
+          return;
+      }
+
+      const loadMessages = async () => {
+          try {
+              const data = await getMessages(selectedChannel.id);
+              setMessages(data);
+              console.log(data)
+          } catch (error) {
+              console.error("Error loading messages:", error);
+          }
+      };
+
+      loadMessages();
+  }, [selectedChannel]);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -343,7 +363,7 @@ export default function App(){
         <Sidebar servers = {servers} setServers = {setServers} selectServer = {selectServer} setSelectServer = {setSelectServer} selectedChannel = {selectedChannel} setSelectedChannel = {setSelectedChannel} user = {user} setUser = {setUser}/>
         <div className="content-area">
           {selectServer ? <Channels selectServer = {selectServer} setSelectServer = {setSelectServer} selectedChannel = {selectedChannel} setSelectedChannel = {setSelectedChannel}/> : <Slider sliderComponent = {sliderComponent} setSliderComponent = {setSliderComponent} users = {userData} setUserData = {setUserData} getRandomActivity = {getRandomActivity} selectServer = {selectServer} user = {user} setUser = {setUser} groups = {groups} selectedGroup = {selectedGroup} setSelectedGroup = {setSelectedGroup} setOpenGroup = {setOpenGroup}/>}
-          <Main sliderComponent = {sliderComponent} setSliderComponent = {setSliderComponent} users = {userData} setUserData = {setUserData} getRandomActivity = {getRandomActivity} messageRequests = {messageRequests} setMessageRequests = {setMessageRequests} selectServer = {selectServer} setSelectServer = {setSelectServer} selectedChannel = {selectedChannel} setSelectedChannel = {setSelectedChannel} setServers = {setServers} user = {user} setUser = {setUser} groups = {groups} setGroups = {setGroups} selectedGroup = {selectedGroup} setOpenGroup = {setOpenGroup}/>
+          <Main sliderComponent = {sliderComponent} setSliderComponent = {setSliderComponent} users = {userData} setUserData = {setUserData} getRandomActivity = {getRandomActivity} messageRequests = {messageRequests} setMessageRequests = {setMessageRequests} selectServer = {selectServer} setSelectServer = {setSelectServer} selectedChannel = {selectedChannel} setSelectedChannel = {setSelectedChannel} messages={messages} setMessages = {setMessages} setServers = {setServers} user = {user} setUser = {setUser} groups = {groups} setGroups = {setGroups} selectedGroup = {selectedGroup} setOpenGroup = {setOpenGroup}/>
         </div>
       </div>
       {openGroup && (
