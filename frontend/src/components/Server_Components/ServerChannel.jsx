@@ -85,14 +85,21 @@ export default function ServerChannel({server,channel,messages,setMessages,setSe
                         <div className="server-channel-messages">
                             {messages.map(msg => (
                                 <div key={msg.message_id} className="discord-chat-message">
+                                    <div className="discord-chat-avatar">
+                                        {msg.author?.username?.[0]?.toUpperCase()}
+                                    </div>
                                     <div className="discord-chat-content">
                                         <span className="discord-chat-username">
-                                            User {msg.author_id}
+                                            {msg.author?.username}
                                         </span>
-                                        <p className="discord-chat-text">{msg.content}</p>
+
+                                        <p className="discord-chat-text">
+                                            {msg.content}
+                                        </p>
                                     </div>
                                 </div>
                             ))}
+
                             <div ref={messagesEndRef} />
                         </div>
                     </div>

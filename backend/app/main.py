@@ -5,7 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.core.database import Base, engine
 from app.models.server import Server, Category, Channel, ServerMember
 from app.models.message import Message
-
+from app.models.user import User
 app = FastAPI()
 
 app.add_middleware(
